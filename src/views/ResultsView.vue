@@ -7,7 +7,7 @@ import { RouterLink } from 'vue-router'
     <h1 class="">Résultats</h1>
   </div>
   
-  <RouterLink to="/" class="btn btn-primary">Nouveau match</RouterLink>
+  <RouterLink to="/" class="btn btn-accent">Nouveau match</RouterLink>
 </template>
 
 <style>
