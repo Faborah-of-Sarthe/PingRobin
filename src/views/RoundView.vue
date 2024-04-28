@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 
 <template>
   <div class="round wrapper">
-    <h1 class="">Ronde X</h1>
+    <h1 class="prose prose-2xl">Ronde X</h1>
   </div>
   
   <RouterLink to="/" class="btn btn-secondary">Précédent</RouterLink>

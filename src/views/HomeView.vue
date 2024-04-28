@@ -5,10 +5,10 @@ import RegistrationForm from '../components/RegistrationForm.vue'
 
 <template>
   <main class="home wrapper">
-    <h1 class="">
-      Nouveau match
+    <h1 class="prose prose-2xl">
+      Nouveau tournoi
     </h1>
     <RegistrationForm />
-    <RouterLink to="/round/0" class="btn btn-primary">Démarrer</RouterLink>
+    <RouterLink to="/round/0" class="btn btn-accent">Démarrer</RouterLink>
   </main>
 </template>

@@ -4,7 +4,7 @@ import { RouterLink } from 'vue-router'
 
 <template>
   <div class="results wrapper">
-    <h1 class="">Résultats</h1>
+    <h1 class="prose prose-2xl">Résultats</h1>
   </div>
   
   <RouterLink to="/" class="btn btn-accent">Nouveau match</RouterLink>
