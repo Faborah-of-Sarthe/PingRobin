@@ -1,16 +1,14 @@
 <script setup>
 import { ref } from 'vue'
+import { usePlayersStore } from '../stores/players'
 
 const name = ref('');
-const players = ref([]);
+const players = usePlayersStore();
 
 function addPlayer() {
   if (!name.value) return;
 
-  players.value.push({
-    id: players.value.length,
-    name: name.value
-  })
+  players.addPlayer(name.value);
 
   name.value = ''
 }
@@ -33,8 +31,8 @@ function addPlayer() {
     <div class="players-list prose">
       <h3 class="prose prose-lg">Joueurs</h3>
       <ul>
-        <li v-for="player in players" :key="player.id">
-          {{ player.name }}
+        <li v-for="player in players.list" :key="player.id">
+          {{ player }}
         </li>
       </ul>
     </div>
