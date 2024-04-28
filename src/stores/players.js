@@ -14,7 +14,12 @@ export const usePlayersStore = defineStore('players', () => {
         list.value.push(player)
     }
 
-    return { list, addPlayer }
+    const removePlayer = (player) => {
+        console.log(player)
+        list.value = list.value.filter(p => p !== player)
+    }
+
+    return { list, addPlayer, removePlayer }
 })
 
 

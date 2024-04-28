@@ -17,7 +17,6 @@ app.mount('#app')
 watch(
     pinia.state,
     (state) => {
-        console.log('TRUCTRUC', state);
         localStorage.setItem('pinia-state', JSON.stringify(state));
     },
     { deep: true }
