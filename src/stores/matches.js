@@ -1,22 +1,25 @@
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { useStorage } from '@vueuse/core'
 
 export const useMatchesStore = defineStore('matches', () => {
 
-    let list = ref([])
+    let list = useStorage('matches', ref([]))
+    let currentRound = useStorage('currentRound', ref(0))
 
-    if (localStorage.getItem("pinia-state")) {
-        const localState = JSON.parse(localStorage.getItem("pinia-state"));
-        list = ref(localState.matches.list)
-    } 
 
     const generateMatches = (players) => {
         const playersCopy = [...players]
+
+        // Randomize the players
+        playersCopy.sort(() => Math.random() - 0.5)
+
         // Dummy player to make even number of players
         if(playersCopy.length % 2 !== 0 ) {
             playersCopy.push('#bye')
             
         }
+        
         const playersNumber = playersCopy.length
         const matches = []
         const rounds = playersNumber % 2 === 0 ? playersNumber - 1 : playersNumber
@@ -31,6 +34,16 @@ export const useMatchesStore = defineStore('matches', () => {
                     round.push({ player1, player2, score1: null, score2: null })
                 }
             }
+
+            // If there is a bye player, move the match to the last position
+            if (players.length % 2 !== 0) {
+                const byeMatch = round.find(match => match.player2 === '#bye' || match.player1 === '#bye')
+                if (byeMatch) {
+                    round.splice(round.indexOf(byeMatch), 1)
+                    round.push(byeMatch)
+                }
+            }
+
             matches.push(round)
             // Add the last player to the second position to rotate the players and keep the first player in the same position
             playersCopy.splice(1, 0, playersCopy.pop())
@@ -39,7 +52,7 @@ export const useMatchesStore = defineStore('matches', () => {
         list.value = matches
     }
 
-    return { list, generateMatches }
+    return { list, currentRound,  generateMatches }
 })
 
 

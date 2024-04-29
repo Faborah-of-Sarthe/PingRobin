@@ -14,7 +14,10 @@ const router = useRouter()
 function launchTournament() {
   matches.generateMatches(players.list);
   modal.value = false;
-  if(matches.list.length) router.push('/rounds');
+  if(matches.list.length) {
+    matches.currentRound = 1;
+    router.push('/rounds');
+  } 
 }
 </script>
 

@@ -13,11 +13,3 @@ app.use(pinia)
 app.use(router)
 
 app.mount('#app')
-
-watch(
-    pinia.state,
-    (state) => {
-        localStorage.setItem('pinia-state', JSON.stringify(state));
-    },
-    { deep: true }
-);
