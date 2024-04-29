@@ -12,8 +12,8 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/round/:id',
-      name: 'round/:id',
+      path: '/rounds',
+      name: 'rounds',
       component: RoundView
     },
     {

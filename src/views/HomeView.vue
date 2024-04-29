@@ -1,11 +1,21 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import RegistrationForm from '../components/RegistrationForm.vue'
 
 import { usePlayersStore } from '@/stores/players';
+import { useMatchesStore } from '@/stores/matches';
+
 const modal = ref(false);
 const players = usePlayersStore();
+const matches = useMatchesStore();
+const router = useRouter()
+
+function launchTournament() {
+  matches.generateMatches(players.list);
+  modal.value = false;
+  if(matches.list.length) router.push('/rounds');
+}
 </script>
 
 <template>
@@ -30,7 +40,7 @@ const players = usePlayersStore();
       </p>
       <div class="flex justify-between">
         <button class="btn btn-outline" @click="modal = false">Annuler</button>
-        <button class="btn btn-accent">Commencer</button>
+        <button class="btn btn-accent" @click="launchTournament">Commencer</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">

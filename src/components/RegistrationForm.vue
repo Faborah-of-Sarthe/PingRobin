@@ -41,7 +41,7 @@ function addPlayer() {
     <form @submit.prevent="addPlayer" class="registration mb-5">
       <div class="field join join-horizontal">
         <label :class="inputState" class="input input-primary flex items-center gap-2 join-item focus:outline-none">
-          <input type="text" id="name" v-model="name" ref="input" class="grow w-full  focus:outline-none" placeholder="Jean-Louis" @keyup="validate"/>
+          <input type="text" id="name" v-model="name" ref="input" class="grow w-full " placeholder="Jean-Louis" @keyup="validate"/>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" /></svg>
         </label>
         <button type="submit" class="btn btn-primary join-item">Ajouter</button>
@@ -50,7 +50,7 @@ function addPlayer() {
       </form>
 
     <div class="players-list prose max-w-96 w-full">
-      <h3 class="prose prose-lg mb-2">Joueurs</h3>
+      <h3 class="prose prose-lg mb-2"> {{ players.list.length || '' }} Joueur{{players.list.length > 1 ? 's' : ''}}</h3>
       <div class="names mb-4">
         <div v-for="(player, index) in players.list" :key="index" class="player p-2 join w-full justify-between mb-2 even:bg-slate-100" >
           <span class="join-item name">{{ player }}</span>
