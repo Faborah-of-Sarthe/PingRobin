@@ -1,12 +1,16 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import { useMatchesStore } from '@/stores/matches'
+import { useStatsStore } from '@/stores/stats'
 import { ref, onMounted, computed, onUpdated } from 'vue'
 import H1 from '@/components/H1.vue'
+import ProgressBar from '@/components/ProgressBar.vue'
 
 const matches = useMatchesStore()
+const stats = useStatsStore()
 const router = useRouter()
 const modal = ref(false);
+const loading = ref(false);
 
 
 // Redirect to home if no matches have been generated or if the list of matches is empty
@@ -22,12 +26,13 @@ function handlePrevious() {
   }
 }
 
-function handleNext() {
+async function handleNext() {
 
   if(matches.currentRound < matches.list.length) {
     matches.currentRound++
   }else {
-    modal.value = true
+    await stats.generate(matches.list)
+    router.push('/results')
   }
 }
 
@@ -36,13 +41,8 @@ function handleNext() {
 <template>
   <div class="hero mb-4">
     <div class="hero-content flex flex-col">
-
       <H1>Ronde {{ matches.currentRound }}</H1>
-      <div class="flex items-center">
-        <span class="badge badge-primary badge-sm py-1">{{ matches.currentRound }}</span>
-        <progress class="progress progress-primary w-full mx-2" :value="matches.progress" max="100"></progress>
-        <span class="badge badge-primary badge-sm py-1">{{ matches.list.length }}</span>
-      </div>
+      <ProgressBar></ProgressBar>
     </div>
   </div>
   <div class="matches content">
@@ -65,7 +65,7 @@ function handleNext() {
   </div>
   <div class="flex justify-between mt-8">
     <button class="btn btn-secondary" @click="handlePrevious">Précédent</button>
-    <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext">Suivant</button>
+    <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext"><span v-if="loading" class="loading loading-spinner loading-xs"></span> {{ matches.isLastRound ? 'Aller aux résultats' : 'Suivant '}}</button>
   </div>
   <dialog id="modal" class="modal" :class="{'modal-open': modal}">
     <div class="modal-box">

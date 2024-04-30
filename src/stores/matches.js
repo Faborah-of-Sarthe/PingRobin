@@ -15,6 +15,10 @@ export const useMatchesStore = defineStore('matches', () => {
        return list.value[currentRound.value - 1].some((match) => { return (match.score1 == null || match.score2  == null) && !match.fake})
     })
 
+    const isLastRound = computed(() => {
+        return currentRound.value === list.value.length
+    })
+
 
     const generateMatches = async (players) => {
         const playersCopy = [...players]
@@ -64,7 +68,7 @@ export const useMatchesStore = defineStore('matches', () => {
         list.value = matches
     }
 
-    return { list, currentRound,  generateMatches, progress, disabledNext }
+    return { list, currentRound,  generateMatches, progress, disabledNext, isLastRound }
 })
 
 
