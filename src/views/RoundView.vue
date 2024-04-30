@@ -1,21 +1,49 @@
 <script setup>
 import { RouterLink, useRouter } from 'vue-router'
 import { useMatchesStore } from '@/stores/matches'
+import { ref, onMounted, computed, onUpdated } from 'vue'
+import H1 from '@/components/H1.vue'
 
 const matches = useMatchesStore()
 const router = useRouter()
+const modal = ref(false);
+
 
 // Redirect to home if no matches have been generated or if the list of matches is empty
 if(matches.currentRound === 0 || !matches.list.length) {
   router.push('/')
 }
 
+function handlePrevious() {
+  if(matches.currentRound > 1) {
+    matches.currentRound--
+  }else {
+    modal.value = true
+  }
+}
+
+function handleNext() {
+
+  if(matches.currentRound < matches.list.length) {
+    matches.currentRound++
+  }else {
+    modal.value = true
+  }
+}
 
 </script>
 
 <template>
   <div class="hero mb-4">
-    <h1 class="prose prose-2xl">Ronde {{ matches.currentRound }}</h1>
+    <div class="hero-content flex flex-col">
+
+      <H1>Ronde {{ matches.currentRound }}</H1>
+      <div class="flex items-center">
+        <span class="badge badge-primary badge-sm py-1">{{ matches.currentRound }}</span>
+        <progress class="progress progress-primary w-full mx-2" :value="matches.progress" max="100"></progress>
+        <span class="badge badge-primary badge-sm py-1">{{ matches.list.length }}</span>
+      </div>
+    </div>
   </div>
   <div class="matches content">
     <div class="matches-list">
@@ -24,21 +52,39 @@ if(matches.currentRound === 0 || !matches.list.length) {
           <div class="player prose prose-l flex-1">{{
           match.player1
           }}</div>
-          <div class="score flex-2">
-            <input type="text" placeholder="0" v-model="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
-            <input type="text" placeholder="0" v-model="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+          <div class="score flex-2" >
+            <input :disabled="match.fake" type="text" placeholder="0" v-model="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
+            <input  :disabled="match.fake" type="text" placeholder="0" v-model="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
           </div>
           <div class="player prose prose-l flex-1 text-right">{{
-          match.player2
+          !match.fake ? match.player2 : ''
           }}</div>
         </div>
       </div>
     </div>
   </div>
-
-  
-  <RouterLink to="/" class="btn btn-secondary">Précédent</RouterLink>
-  <RouterLink to="/results" class="btn btn-primary">Suivant</RouterLink>
+  <div class="flex justify-between mt-8">
+    <button class="btn btn-secondary" @click="handlePrevious">Précédent</button>
+    <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext">Suivant</button>
+  </div>
+  <dialog id="modal" class="modal" :class="{'modal-open': modal}">
+    <div class="modal-box">
+      <form method="dialog">
+        <button @click="modal = false" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <h3 class="font-bold text-lg">Revenir aux choix des joueurs ?</h3>
+      <p class="py-4">
+        Vous êtes sur le point de revenir à la page d'accueil. Vous pourrez alors modifier la liste des joueurs et recalculer les matchs.
+      </p>
+      <div class="flex justify-between">
+        <button class="btn btn-outline" @click="modal = false">Annuler</button>
+        <RouterLink to="/" class="btn btn-secondary">Précédent</RouterLink>
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button  @click="modal = false">close</button>
+    </form>
+  </dialog>
 </template>
 
 <style>

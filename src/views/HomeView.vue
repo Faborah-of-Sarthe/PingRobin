@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import RegistrationForm from '../components/RegistrationForm.vue'
+import H1 from '@/components/H1.vue';
 
 import { usePlayersStore } from '@/stores/players';
 import { useMatchesStore } from '@/stores/matches';
@@ -10,27 +11,29 @@ const modal = ref(false);
 const players = usePlayersStore();
 const matches = useMatchesStore();
 const router = useRouter()
+const loading = ref(false);
 
-function launchTournament() {
-  matches.generateMatches(players.list);
+async function  launchTournament() {
+  loading.value = true;
+  await matches.generateMatches(players.list);
   modal.value = false;
   if(matches.list.length) {
     matches.currentRound = 1;
     router.push('/rounds');
   } 
+  loading.value = false;
 }
 </script>
 
 <template>
   <div class="hero">
-
-    <h1 class="prose prose-2xl">
+    <H1>
       Nouveau tournoi
-    </h1>
+    </H1>
   </div>
   <RegistrationForm />
   <div class="flex justify-center">
-    <button to="/round/0" @click="modal = true"  :class="{'btn-disabled': players.list.length < 3}" class="btn btn-accent">Démarrer</button>
+    <button to="/round/0" @click="modal = true"  :class="{'btn-disabled': players.list.length < 3}" class="btn btn-primary">Démarrer</button>
   </div>
   <dialog id="modal" class="modal" :class="{'modal-open': modal}">
     <div class="modal-box">
@@ -43,7 +46,7 @@ function launchTournament() {
       </p>
       <div class="flex justify-between">
         <button class="btn btn-outline" @click="modal = false">Annuler</button>
-        <button class="btn btn-accent" @click="launchTournament">Commencer</button>
+        <button class="btn btn-primary" @click="launchTournament"><span v-if="loading" class="loading loading-spinner loading-xs"></span> Commencer</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">

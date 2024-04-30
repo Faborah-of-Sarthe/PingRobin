@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 
@@ -7,8 +7,16 @@ export const useMatchesStore = defineStore('matches', () => {
     let list = useStorage('matches', ref([]))
     let currentRound = useStorage('currentRound', ref(0))
 
+    const progress = computed(() => {
+        return currentRound.value / list.value.length * 100
+    })
 
-    const generateMatches = (players) => {
+    const disabledNext = computed(() => {
+       return list.value[currentRound.value - 1].some((match) => { return (match.score1 == null || match.score2  == null) && !match.fake})
+    })
+
+
+    const generateMatches = async (players) => {
         const playersCopy = [...players]
 
         // Randomize the players
@@ -35,10 +43,14 @@ export const useMatchesStore = defineStore('matches', () => {
                 }
             }
 
-            // If there is a bye player, move the match to the last position
+            // If there is a bye player, move the match to the last position and add the bye player to the second position
             if (players.length % 2 !== 0) {
                 const byeMatch = round.find(match => match.player2 === '#bye' || match.player1 === '#bye')
                 if (byeMatch) {
+                    byeMatch.player1 = byeMatch.player1 === '#bye' ? byeMatch.player2 : byeMatch.player1
+                    byeMatch.player2 = '#bye'
+                    byeMatch.fake = true
+                    
                     round.splice(round.indexOf(byeMatch), 1)
                     round.push(byeMatch)
                 }
@@ -48,11 +60,11 @@ export const useMatchesStore = defineStore('matches', () => {
             // Add the last player to the second position to rotate the players and keep the first player in the same position
             playersCopy.splice(1, 0, playersCopy.pop())
         }
-
+       
         list.value = matches
     }
 
-    return { list, currentRound,  generateMatches }
+    return { list, currentRound,  generateMatches, progress, disabledNext }
 })
 
 
