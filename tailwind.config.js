@@ -13,6 +13,7 @@ export default {
       {
         sporty: {
           "primary": "#14b8a6",
+          "text-primary": "#ffffff",
           "secondary": "#115e59",
           "accent": "#9d174d",
           "neutral": "#ffffff",
@@ -21,6 +22,9 @@ export default {
           "success": "#84cc16",
           "warning": "#f59e0b",
           "error": "#b91c1c",
+          ".btn-primary": {
+            "color": "#ffffff",
+          },
         },
       },
     ],

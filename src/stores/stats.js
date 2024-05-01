@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore } from 'pinia'
 import { useStorage } from '@vueuse/core'
 import { usePlayersStore } from './players'
@@ -6,6 +6,7 @@ import { usePlayersStore } from './players'
 export const useStatsStore = defineStore('stats', () => {
 
     let stats = useStorage('stats', ref([]))
+    let activeColumn = useStorage('activeColumn', ref('wins'))
     const columns =ref([
         {
             name: 'player',
@@ -53,6 +54,7 @@ export const useStatsStore = defineStore('stats', () => {
             sortable: true
         }
     ]);
+
     const players = usePlayersStore();
 
     async function generate(matches) {
@@ -90,17 +92,23 @@ export const useStatsStore = defineStore('stats', () => {
 
         })
         stats.value = tempStats
+        this.sortBy(activeColumn.value)
     }
 
     async function sortBy(key) {
         stats.value = stats.value.sort((a, b) => b[key] - a[key])
     }
 
+    watch(activeColumn, (value) => {
+        sortBy(value)
+    })
+
     return {
         stats,
         generate,
         sortBy,
-        columns
+        columns,
+        activeColumn
     }
 
 })
