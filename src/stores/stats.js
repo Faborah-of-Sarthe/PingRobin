@@ -43,7 +43,6 @@ export const useStatsStore = defineStore('stats', () => {
 
         })
         stats.value = tempStats
-        
     }
 
     return {

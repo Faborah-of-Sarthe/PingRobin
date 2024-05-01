@@ -53,8 +53,8 @@ async function handleNext() {
           match.player1
           }}</div>
           <div class="score flex-2" >
-            <input :disabled="match.fake" type="number" placeholder="0" v-model="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
-            <input :disabled="match.fake" type="number" placeholder="0" v-model="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+            <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
+            <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
           </div>
           <div class="player prose prose-l flex-1 text-right">{{
           !match.fake ? match.player2 : ''
