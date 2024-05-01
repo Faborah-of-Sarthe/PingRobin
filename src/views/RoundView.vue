@@ -39,52 +39,55 @@ async function handleNext() {
 </script>
 
 <template>
-  <div class="hero mb-4">
-    <div class="hero-content flex flex-col">
-      <H1>Ronde {{ matches.currentRound }}</H1>
-      <ProgressBar></ProgressBar>
+  <div class="small-container">
+    <div class="hero mb-4">
+      <div class="hero-content flex flex-col">
+        <H1>Ronde {{ matches.currentRound }}</H1>
+        <ProgressBar></ProgressBar>
+      </div>
     </div>
-  </div>
-  <div class="matches content">
-    <div class="matches-list">
-      <div v-for="(match, index) in matches.list[matches.currentRound - 1]" :key="index" class="match">
-        <div class="match flex justify-between items-center mb-4">
-          <div class="player prose prose-l flex-1">{{
-          match.player1
-          }}</div>
-          <div class="score flex-2" >
-            <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
-            <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+    <div class="matches content">
+      <div class="matches-list">
+        <div v-for="(match, index) in matches.list[matches.currentRound - 1]" :key="index" class="match">
+          <div class="match flex justify-between items-center mb-4">
+            <div class="player prose prose-l flex-1">{{
+            match.player1
+            }}</div>
+            <div class="score flex-2" >
+              <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
+              <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+            </div>
+            <div class="player prose prose-l flex-1 text-right">{{
+            !match.fake ? match.player2 : ''
+            }}</div>
           </div>
-          <div class="player prose prose-l flex-1 text-right">{{
-          !match.fake ? match.player2 : ''
-          }}</div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="flex justify-between mt-8">
-    <button class="btn btn-secondary" @click="handlePrevious">Précédent</button>
-    <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext"><span v-if="loading" class="loading loading-spinner loading-xs"></span> {{ matches.isLastRound ? 'Aller aux résultats' : 'Suivant '}}</button>
-  </div>
-  <dialog id="modal" class="modal" :class="{'modal-open': modal}">
-    <div class="modal-box">
-      <form method="dialog">
-        <button @click="modal = false" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
-      </form>
-      <h3 class="font-bold text-lg">Revenir aux choix des joueurs ?</h3>
-      <p class="py-4">
-        Vous êtes sur le point de revenir à la page d'accueil. Vous pourrez alors modifier la liste des joueurs et recalculer les matchs.
-      </p>
-      <div class="flex justify-between">
-        <button class="btn btn-outline" @click="modal = false">Annuler</button>
-        <RouterLink to="/" class="btn btn-secondary">Précédent</RouterLink>
-      </div>
+    <div class="flex justify-between mt-8">
+      <button class="btn btn-secondary" @click="handlePrevious">Précédent</button>
+      <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext"><span v-if="loading" class="loading loading-spinner loading-xs"></span> {{ matches.isLastRound ? 'Aller aux résultats' : 'Suivant '}}</button>
     </div>
-    <form method="dialog" class="modal-backdrop">
-      <button  @click="modal = false">close</button>
-    </form>
-  </dialog>
+    <dialog id="modal" class="modal" :class="{'modal-open': modal}">
+      <div class="modal-box">
+        <form method="dialog">
+          <button @click="modal = false" class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+        </form>
+        <h3 class="font-bold text-lg">Revenir aux choix des joueurs ?</h3>
+        <p class="py-4">
+          Vous êtes sur le point de revenir à la page d'accueil. Vous pourrez alors modifier la liste des joueurs et recalculer les matchs.
+        </p>
+        <div class="flex justify-between">
+          <button class="btn btn-outline" @click="modal = false">Annuler</button>
+          <RouterLink to="/" class="btn btn-secondary">Précédent</RouterLink>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button  @click="modal = false">close</button>
+      </form>
+    </dialog>
+  </div>
+
 </template>
 
 <style>

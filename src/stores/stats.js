@@ -6,6 +6,53 @@ import { usePlayersStore } from './players'
 export const useStatsStore = defineStore('stats', () => {
 
     let stats = useStorage('stats', ref([]))
+    const columns =ref([
+        {
+            name: 'player',
+            label: ' ',
+            sortable: false
+        },
+        {
+            name: 'wins',
+            label: 'Victoires',
+            sortable: true
+        },
+        {
+            name: 'losses',
+            label: 'Défaites',
+            sortable: true
+        },
+        {
+            name: 'draws',
+            label: 'Nuls',
+            sortable: true
+        },
+        {
+            name: 'pointsScored',
+            label: 'Points marqués',
+            sortable: true
+        },
+        {
+            name: 'pointsConceded',
+            label: 'Points encaissés',
+            sortable: true
+        },
+        {
+            name: 'goalDifference',
+            label: 'Différence de points',
+            sortable: true
+        },
+        {
+            name: 'points',
+            label: 'Points',
+            sortable: true
+        },
+        {
+            name: 'totalPositiveGoalDifference',
+            label: 'Cumul positif',
+            sortable: true
+        }
+    ]);
     const players = usePlayersStore();
 
     async function generate(matches) {
@@ -45,9 +92,15 @@ export const useStatsStore = defineStore('stats', () => {
         stats.value = tempStats
     }
 
+    async function sortBy(key) {
+        stats.value = stats.value.sort((a, b) => b[key] - a[key])
+    }
+
     return {
         stats,
-        generate
+        generate,
+        sortBy,
+        columns
     }
 
 })
