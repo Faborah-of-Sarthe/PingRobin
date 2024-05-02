@@ -103,12 +103,17 @@ export const useStatsStore = defineStore('stats', () => {
         sortBy(value)
     })
 
+    function reset() {
+        stats.value = []
+    }
+
     return {
         stats,
         generate,
         sortBy,
         columns,
-        activeColumn
+        activeColumn,
+        reset
     }
 
 })

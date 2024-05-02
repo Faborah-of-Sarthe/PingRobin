@@ -6,16 +6,20 @@ import H1 from '@/components/H1.vue';
 
 import { usePlayersStore } from '@/stores/players';
 import { useMatchesStore } from '@/stores/matches';
+import { useStatsStore } from '@/stores/stats';
 
 const modal = ref(false);
 const players = usePlayersStore();
 const matches = useMatchesStore();
+const stats = useStatsStore();
 const router = useRouter()
 const loading = ref(false);
 
 async function  launchTournament() {
   loading.value = true;
   await matches.generateMatches(players.list);
+  stats.reset();
+
   modal.value = false;
   if(matches.list.length) {
     matches.currentRound = 1;

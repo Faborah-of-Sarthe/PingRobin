@@ -57,7 +57,7 @@ const isVisible = (columnKey) => {
     </div>
   </div>
   <div class="flex justify-center mt-8">
-    <RouterLink to="/" class="btn btn-primary">Nouveau match</RouterLink>
+    <RouterLink to="/" class="btn btn-primary">Nouveau tournoi</RouterLink>
   </div>
 </template>
 
