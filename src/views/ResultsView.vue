@@ -35,7 +35,7 @@ const isVisible = (columnKey) => {
     </div>
     <div class="row">
       <div class="col-12">
-        <table class="table table-zebra text-base">
+        <table class="table text-base">
           <thead>
             <tr>
               <th>#</th>
@@ -45,7 +45,7 @@ const isVisible = (columnKey) => {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(player, index) in statsStore.stats" :key="index">
+            <tr v-for="(player, index) in statsStore.stats" :key="index" class="odd:bg-slate-100">
               <td class="w-4">{{ index + 1 }}</td>
               <template v-for="column in statsStore.columns" :key="column.name">
                 <td :class="{'text-right w-4': column.name !== 'player'}"  v-if="isVisible(column.name)">{{ player[column.name] }}</td>
