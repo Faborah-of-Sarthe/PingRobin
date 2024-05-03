@@ -14,7 +14,7 @@ const loading = ref(false);
 
 
 // Redirect to home if no matches have been generated or if the list of matches is empty
-if(matches.currentRound === 1 || !matches.list.length) {
+if(matches.currentRound === 0  || !matches.list.length) {
   router.push('/')
 }
 
