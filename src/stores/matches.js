@@ -5,14 +5,27 @@ import { useStorage } from '@vueuse/core'
 export const useMatchesStore = defineStore('matches', () => {
 
     let list = useStorage('matches', ref([]))
-    let currentRound = useStorage('currentRound', ref(0))
+    let currentRound = useStorage('currentRound', ref(1))
 
     const progress = computed(() => {
         return currentRound.value / list.value.length * 100
     })
 
     const disabledNext = computed(() => {
-       return list.value[currentRound.value - 1].some((match) => { return (match.score1 == null || match.score2  == null) && !match.fake})
+        if(!list.value.length) {
+            return true;
+        }
+       return list.value[currentRound.value - 1].some((match) => { 
+        return (
+            match.score1 === null ||
+            match.score2  === null ||
+            match.score1 === '' ||
+            match.score2 === '' ||
+            match.score1 < 0 ||
+            match.score2 < 0 ||
+            isNaN(match.score1) ||
+            isNaN(match.score2)
+        ) && !match.fake})
     })
 
     const isLastRound = computed(() => {

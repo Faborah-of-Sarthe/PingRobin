@@ -2,7 +2,7 @@
 import { RouterLink, useRouter } from 'vue-router'
 import { useMatchesStore } from '@/stores/matches'
 import { useStatsStore } from '@/stores/stats'
-import { ref, onMounted, computed, onUpdated } from 'vue'
+import { ref } from 'vue'
 import H1 from '@/components/H1.vue'
 import ProgressBar from '@/components/ProgressBar.vue'
 
@@ -14,7 +14,7 @@ const loading = ref(false);
 
 
 // Redirect to home if no matches have been generated or if the list of matches is empty
-if(matches.currentRound === 0 || !matches.list.length) {
+if(matches.currentRound === 1 || !matches.list.length) {
   router.push('/')
 }
 
@@ -30,6 +30,10 @@ async function handleNext() {
 
   if(matches.currentRound < matches.list.length) {
     matches.currentRound++
+    const input = document.querySelector('.match input')
+    if(input) {
+      input.focus()
+    }
   }else {
     await stats.generate(matches.list)
     router.push('/results')
@@ -48,14 +52,14 @@ async function handleNext() {
     </div>
     <div class="matches content">
       <div class="matches-list">
-        <div v-for="(match, index) in matches.list[matches.currentRound - 1]" :key="index" class="match">
+        <div v-for="(match, index) in matches.list[matches.currentRound - 1]" :key="`round-${index}`" class="match">
           <div class="match flex justify-center items-center mb-4 break-all">
             <div class="player prose prose-l flex-1">{{
             match.player1
             }}</div>
             <div class="score flex-nowrap flex" >
-              <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
-              <input :disabled="match.fake" type="text" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+              <input :disabled="match.fake" type="number" min="0" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
+              <input :disabled="match.fake" type="number" min="0" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
             </div>
             <div class="player prose prose-l flex-1 text-right break-all">{{
             !match.fake ? match.player2 : ''
@@ -64,9 +68,9 @@ async function handleNext() {
         </div>
       </div>
     </div>
-    <div class="flex justify-between mt-8">
-      <button class="btn btn-outline" @click="handlePrevious">Précédent</button>
+    <div class="flex justify-between mt-8 flex-row-reverse">
       <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext"><span v-if="loading" class="loading loading-spinner loading-xs"></span> {{ matches.isLastRound ? 'Aller aux résultats' : 'Suivant '}}</button>
+      <button class="btn btn-outline" @click="handlePrevious">Précédent</button>
     </div>
     <dialog id="modal" class="modal" :class="{'modal-open': modal}">
       <div class="modal-box">
