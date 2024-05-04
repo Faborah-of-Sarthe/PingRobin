@@ -44,7 +44,7 @@ async function handleNext() {
 
 <template>
   <div class="small-container">
-    <div class="hero mb-4">
+    <div class="hero mb-8">
       <div class="hero-content flex flex-col">
         <H1>Ronde {{ matches.currentRound }}</H1>
         <ProgressBar></ProgressBar>
