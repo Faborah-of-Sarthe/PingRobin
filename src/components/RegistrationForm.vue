@@ -50,7 +50,7 @@ function addPlayer() {
       </form>
 
     <div class="players-list prose max-w-96 w-full">
-      <h3 class="prose prose-lg mb-2"> {{ players.list.length || '' }} Joueur{{players.list.length > 1 ? 's' : ''}}</h3>
+      <h3 v-if="players.list.length" class="prose prose-lg mb-2"> {{ players.list.length || '' }} Joueur{{players.list.length > 1 ? 's' : ''}}</h3>
       <div class="names mb-4">
         <div v-for="(player, index) in players.list" :key="index" class="player p-2 join w-full justify-between mb-2 even:bg-slate-100" >
           <span class="join-item name">{{ player }}</span>
