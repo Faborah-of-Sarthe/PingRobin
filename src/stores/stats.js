@@ -54,6 +54,7 @@ export const useStatsStore = defineStore('stats', () => {
             sortable: true
         }
     ]);
+    const reversedColumns = ['losses', 'pointsConceded'];
 
     const players = usePlayersStore();
 
@@ -96,7 +97,11 @@ export const useStatsStore = defineStore('stats', () => {
     }
 
     async function sortBy(key) {
-        stats.value = stats.value.sort((a, b) => b[key] - a[key])
+        if (reversedColumns.includes(key)) {
+            stats.value = stats.value.sort((a, b) => a[key] - b[key])
+        } else {
+            stats.value = stats.value.sort((a, b) => b[key] - a[key])
+        }
     }
 
     watch(activeColumn, (value) => {
