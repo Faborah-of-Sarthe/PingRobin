@@ -7,6 +7,7 @@ export const useStatsStore = defineStore('stats', () => {
 
     let stats = useStorage('stats', ref([]))
     let activeColumn = useStorage('activeColumn', ref('wins'))
+    let scoreEnabled = useStorage('scoreEnabled', ref(true))
     const columns =ref([
         {
             name: 'player',
@@ -118,6 +119,7 @@ export const useStatsStore = defineStore('stats', () => {
         sortBy,
         columns,
         activeColumn,
+        scoreEnabled,
         reset
     }
 

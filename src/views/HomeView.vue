@@ -36,6 +36,16 @@ async function  launchTournament() {
     </H1>
   </div>
   <RegistrationForm />
+  
+  <div class="flex justify-center mb-6">
+    <div class="form-control">
+      <label class="label cursor-pointer">
+        <span class="label-text mr-4">Compter les points :</span>
+        <input type="checkbox" v-model="stats.scoreEnabled" class="toggle toggle-primary" />
+      </label>
+    </div>
+  </div>
+  
   <div class="flex justify-center">
     <button to="/round/0" @click="modal = true"  :class="{'btn-disabled': players.list.length < 3}" class="btn btn-primary">Démarrer</button>
   </div>

@@ -31,11 +31,13 @@ async function handleNext() {
   if(matches.currentRound < matches.list.length) {
     matches.currentRound++
     const input = document.querySelector('.match input')
-    if(input) {
+    if(input && stats.scoreEnabled) {
       input.focus()
     }
   }else {
-    await stats.generate(matches.list)
+    if(stats.scoreEnabled) {
+      await stats.generate(matches.list)
+    }
     router.push('/results')
   }
 }
@@ -58,8 +60,13 @@ async function handleNext() {
             match.player1
             }}</div>
             <div class="score flex-nowrap flex" >
-              <input :disabled="match.fake" type="number" min="0" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
-              <input :disabled="match.fake" type="number" min="0" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+              <template v-if="stats.scoreEnabled">
+                <input :disabled="match.fake" type="number" min="0" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score1" class="input w-12 bg-slate-200 text-center font-bold prose p-2 mr-2 focus:outline-none" />
+                <input :disabled="match.fake" type="number" min="0" placeholder="0" v-model.number="matches.list[matches.currentRound - 1][index].score2" class="input w-12 bg-slate-200 text-center font-bold prose p-2   focus:outline-none" />
+              </template>
+              <template v-else>
+                <div class="flex items-center text-slate-500 font-bold">vs</div>
+              </template>
             </div>
             <div class="player prose prose-l flex-1 text-right break-all">{{
             !match.fake ? match.player2 : ''
@@ -69,7 +76,7 @@ async function handleNext() {
       </div>
     </div>
     <div class="flex justify-between mt-8 flex-row-reverse">
-      <button :disabled="matches.disabledNext" class="btn btn-primary"  @click="handleNext"><span v-if="loading" class="loading loading-spinner loading-xs"></span> {{ matches.isLastRound ? 'Aller aux résultats' : 'Suivant '}}</button>
+      <button :disabled="stats.scoreEnabled ? matches.disabledNext : false" class="btn btn-primary"  @click="handleNext"><span v-if="loading" class="loading loading-spinner loading-xs"></span> {{ matches.isLastRound ? 'Aller aux résultats' : 'Suivant '}}</button>
       <button class="btn btn-outline" @click="handlePrevious">Précédent</button>
     </div>
     <dialog id="modal" class="modal" :class="{'modal-open': modal}">
